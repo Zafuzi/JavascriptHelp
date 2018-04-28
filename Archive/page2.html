@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Fresh Fridge</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+<!-- Latest compiled and minified CSS -->
+    <script src="js/Chart.min.js"></script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+      <script src="https://playground.abysscorp.org/chartjs/livecharts/dist/Chart.min.js"></script>
+      <script src="script.js"></script>
+      <style>
+        canvas {
+          display: inline-block !important;
+        }
+      </style>
+
+
+  </head>
+  <body>
+
+  <div>
+    <div>
+      <div>
+        <div>
+
+
+                <div class="row">
+                  <div class="col-sm-12 hiddenRow">
+                    <div class="accordian-body collapse" id="demo1">
+                      <div class="data-log" style="overflow:auto;">
+
+                            <div class="col-sm-12">
+                                <table class="table">
+
+
+
+<!--this is the inner graph that displays risk and status-->
+
+          <div class="row inner-graph" style="border-bottom:solid 1px #fff;">
+            <div class="drop-border col-12 col-sm-12 col-md-12 col-lg-7 col-xl-8">
+
+              <canvas id="chart0" class="hide-canvas"></canvas>
+
+
+
+
+<script>
+
+              var samples = 20;
+              var speed = 250;
+              let timeout = samples * speed;
+              var values = [];
+              var labels = [];
+              var charts = [];
+              var value = 0;
+              var scale = 1;
+
+              addEmptyValues(values, samples);
+
+
+
+              var originalCalculateXLabelRotation = Chart.Scale.prototype.calculateXLabelRotation
+
+              function initialize() {
+                charts.push(new Chart(document.getElementById("chart0"), {
+                  type: 'line',
+                  data: {
+                    //labels: labels,
+                    datasets: [{
+                      data: values,
+                      backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                      borderColor: 'rgb(255, 99, 132)',
+                      borderWidth: 2,
+                      lineTension: 0.25,
+                      pointRadius: 0
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    animation: {
+                      duration: speed * 1.5,
+                      easing: 'linear'
+                    },
+                    legend: false,
+                    scales: {
+                      xAxes: [{
+                        type: "time",
+                        display: true
+                      }],
+                      yAxes: [{
+                        ticks: {
+                          max: 1,
+                          min: -1
+                        }
+                      }]
+                    }
+                  }
+                })
+              );
+              }
+
+              function addEmptyValues(arr, n) {
+                for(var i = 0; i < n; i++) {
+                  arr.push({
+                    x: moment().subtract((n - i) * speed, 'milliseconds').toDate(),
+                    y: null
+                  });
+                }
+              }
+
+              function rescale() {
+                var padding = [];
+
+                addEmptyValues(padding, 10);
+                values.splice.apply(values, padding);
+
+                scale++;
+              }
+
+              function updateCharts(){
+                charts.forEach(function(chart) {
+                  chart.update();
+                });
+              }
+
+              function progress() {
+                value = Math.min(Math.max(value + (0.1 - Math.random() / 5), -1), 1);
+                values.push({
+                  x: new Date(),
+                  y: value
+                });
+                values.shift();
+              }
+
+              function advance() {
+                if (values[0] !== null && scale < 4) {
+                  //rescale();
+                  updateCharts();
+                }
+
+                progress();
+                updateCharts();
+
+                setTimeout(function() {
+                  requestAnimationFrame(advance);
+                }, speed);
+              }
+
+              document.ready = function() {
+                initialize();
+                advance();
+              };
+
+</script>
+
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-4" style="background-color: black;">
+              <div class="row risk-panel">
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline"><div class="circle" style="background-color:#DE6B24;"></div><p>High Risk</p></div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline"><div class="circle" style="background-color:#FFFF67; margin-left:-11px;"></div><p>Medium Risk</p></div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline"><div class="circle" style="background-color:#1299D5;"></div><p>Low Risk</p></div>
+              </div>
+
+              <div class="row risk-panel">
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline" style="color:#DE6B24;"><h3>10</h3></div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-line" style="color:#FFFF67;"><h3>16</h3></div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline" style="color:#1299D5;"><h3>34</h3></div>
+              </div>
+
+              <div class="row risk-panel-noline">
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline" style="color:#AFAFAF;"><h3>10</h3></div>
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-line" style="color:#6230D1;"><h3>50</h3></div>
+
+                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-none">
+                  <div class="col-12" style="color:#AFAFAF;">
+                    <div class="circle" style="background-color:#AFAFAF; margin-top: 12px"></div><p>offline</p>
+                  </div>
+
+                  <div class="col-12" style="color:#6230D1;">
+                    <div class="circle" style="background-color:#6230D1; margin-top:12px"></div><p>online</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+                                    <thead class="inner-table-head">
+                                        <tr class="row table-row-light-white">
+                                            <th class="col-6 col-sm-2">
+                                                <input type="text" class="form-control" placeholder="SENSOR SERIAL #" aria-label="SENSOR SERIAL #" aria-describedby="basic-addon2">
+                                            </th>
+
+                                            <th class="col-6 col-sm-2">
+                                                <input type="text" class="form-control" placeholder="SENSOR TYPE" aria-label="SENSOR TYPE" aria-describedby="basic-addon2">
+                                            </th>
+
+                                            <th class="col-12 col-sm-2">
+                                                <input type="text" class="form-control" placeholder="SENSOR METRIC" aria-label="SENSOR METRIC" aria-describedby="basic-addon2">
+                                            </th>
+
+                                            <th class="col-12 col-sm-2">
+                                                <input type="date" class="form-control" placeholder="DATE" aria-label="DATE">
+                                            </th>
+
+                                            <th class="col-12 col-sm-4">
+                                                <div class="input-group add-on">
+                                                  <input class="form-control" placeholder="SEARCH" name="srch-term" id="srch-term" type="text">
+                                                  <div class="input-group-btn">
+                                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                                  </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+<!--row------------------------------------------------------>
+                                        <tr id="1" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>1</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="SN# 287278248338" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="TEMPERATURE" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="25 C" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#6230D1; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#1299D5; float:left:; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">90% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+
+                                        </tr>
+<!--row------------------------------------------------------>
+                                        <tr id="2" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>2</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="SN# 555629637568" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="HUMIDITY" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="80%" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#6230D1; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#1299D5; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">40% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+
+                                        </tr>
+<!--row------------------------------------------------------>
+                                        <tr id="3" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>3</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="483732359797" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="LOAD CELL" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="100" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#6230D1; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#FFFF67; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">40% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+
+                                        </tr>
+<!--row------------------------------------------------------>
+                                        <tr id="4" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>4</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="SN# 793273846475" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="ECO2" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="1000" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#6230D1; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#DE6B24; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">40% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+
+                                        </tr>
+<!--row------------------------------------------------------>
+                                        <tr id="5" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>5</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="SN# 957439888383 " style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="TVDC" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="100" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#6230D1; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#FFFF67; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">40% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+
+                                        </tr>
+<!--row------------------------------------------------------>
+                                        <tr id="6" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>6</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="SN# 389884426582" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="LIGHT" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="1" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#6230D1; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#DE6B24; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">40% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+
+                                        </tr>
+<!--row------------------------------------------------------>
+                                        <tr id="7" class="row table-row-light-white">
+
+
+                                          <th scope="row" class="col-12 col-sm-2">
+                                            <div class="input-group">
+
+                                                <p>7</p>
+
+                                            <div class="input-group-append" style="margin-left:25px;">
+                                                <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                <div id="inner-toggle"></div>
+                                                </div>
+                                            </div>
+
+                                            </div>
+                                          </th>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="SN# 658265769777" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="ACCELEROMETER" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-4 col-sm-2">
+                                                <input type="text" readonly class="form-control-plaintext" id="" value="G" style=" font-family: 'HelveticaNeue-Bold';">
+                                            </td>
+
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#AFAFAF; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+                                            <td class="col-3 col-sm-1">
+                                                <div class="input-group">
+                                                  <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold';">
+
+                                                  <div class="input-group-append">
+                                                    <div class="circle" style="background-color:#AFAFAF; float:left; margin-top:10px; position: absolute;">
+                                                  </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="col-6 col-sm-2">
+                                              <div class="progress-light">
+                                                <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                  <span class="sr-only">40% Complete (success)</span>
+                                                </div>
+                                              </div>
+                                            </td>
+                                        </tr>
+<!--row------------------------------------------------------>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+<!--2nd inner table begins here---------------------------------------------------->
+
+
+                <div class="row">
+                  <div class="col-sm-12 hiddenRow">
+                    <div class="accordian-body collapse" id="demo2">
+                      <div class="data-log" style="overflow:auto;">
+
+                            <div class="col-sm-12">
+                                <table class="table">
+
+                                    <thead class="inner-table-head">
+                                        <tr class="row table-row-light-white">
+                                            <th class="col-sm-2">
+                                                <input type="text" class="form-control" placeholder="SENSOR SERIAL #" aria-label="SENSOR SERIAL #" aria-describedby="basic-addon2">
+                                            </th>
+
+                                            <th class="col-sm-2">
+                                                <input type="text" class="form-control" placeholder="SENSOR TYPE" aria-label="SENSOR TYPE" aria-describedby="basic-addon2">
+                                            </th>
+
+                                            <th class="col-sm-4">
+                                                  <input type="text" class="form-control" placeholder="SENSOR METRIC" aria-label="SENSOR METRIC" aria-describedby="basic-addon2">
+                                            </th>
+
+                                            <th class="col-sm-4">
+                                                <div class="input-group add-on">
+                                                  <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text">
+                                                  <div class="input-group-btn">
+                                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                                  </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+<!--inner-graph-display---------------------------------->
+
+                            <div class="container">
+                                <div class="row" style="border-bottom:solid 1px #fff; margin-top: -1px;">
+
+                                    <div class="drop-border col-12 col-sm-12 col-md-12 col-lg-7 col-xl-8">
+
+                                        <canvas id="chart3" class="hide-canvas"></canvas>
+
+
+                                        <script>
+
+                                        var samples = 20;
+                                        var speed = 250;
+                                        let timeout = samples * speed;
+                                        var values = [];
+                                        var labels = [];
+                                        var charts = [];
+                                        var value = 0;
+                                        var scale = 1;
+
+                                        addEmptyValues(values, samples);
+
+
+
+                                        var originalCalculateXLabelRotation = Chart.Scale.prototype.calculateXLabelRotation
+
+                                        function initialize() {
+                                          charts.push(new Chart(document.getElementById("chart3"), {
+                                            type: 'line',
+                                            data: {
+                                              //labels: labels,
+                                              datasets: [{
+                                                data: values,
+                                                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                                borderColor: 'rgb(255, 99, 132)',
+                                                borderWidth: 2,
+                                                lineTension: 0.25,
+                                                pointRadius: 0
+                                              }]
+                                            },
+                                            options: {
+                                              responsive: true,
+                                              animation: {
+                                                duration: speed * 1.5,
+                                                easing: 'linear'
+                                              },
+                                              legend: false,
+                                              scales: {
+                                                xAxes: [{
+                                                  type: "time",
+                                                  display: true
+                                                }],
+                                                yAxes: [{
+                                                  ticks: {
+                                                    max: 1,
+                                                    min: -1
+                                                  }
+                                                }]
+                                              }
+                                            }
+                                          })
+                                        );
+                                        }
+
+                                        function addEmptyValues(arr, n) {
+                                          for(var i = 0; i < n; i++) {
+                                            arr.push({
+                                              x: moment().subtract((n - i) * speed, 'milliseconds').toDate(),
+                                              y: null
+                                            });
+                                          }
+                                        }
+
+                                        function rescale() {
+                                          var padding = [];
+
+                                          addEmptyValues(padding, 10);
+                                          values.splice.apply(values, padding);
+
+                                          scale++;
+                                        }
+
+                                        function updateCharts(){
+                                          charts.forEach(function(chart) {
+                                            chart.update();
+                                          });
+                                        }
+
+                                        function progress() {
+                                          value = Math.min(Math.max(value + (0.1 - Math.random() / 5), -1), 1);
+                                          values.push({
+                                            x: new Date(),
+                                            y: value
+                                          });
+                                          values.shift();
+                                        }
+
+                                        function advance() {
+                                          if (values[0] !== null && scale < 4) {
+                                            //rescale();
+                                            updateCharts();
+                                          }
+
+                                          progress();
+                                          updateCharts();
+
+                                          setTimeout(function() {
+                                            requestAnimationFrame(advance);
+                                          }, speed);
+                                        }
+
+                                        window.onload = function() {
+                                          initialize();
+                                          advance();
+                                        };
+
+                                        </script>
+
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-4" style="background-color: black;">
+                                        <div class="measure-display" style="text-align: center; color:red; display: flex; align-items: center; justify-content: center; padding:30%;">
+                                            <div class="col-12">
+                                                <h1>80%</h1>
+                                                <h2>LAST RECORD</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-sm-12">
+                                        <table class="table">
+
+                                            <thead class="">
+                                                <tr class="row table-row-light-white">
+
+                                                    <th class="col-sm-1">
+                                                    </th>
+
+                                                    <th class="col-6 col-sm-2">
+                                                        <input type="text" class="form-control" placeholder="STATUS" aria-label="STATUS" aria-describedby="basic-addon2">
+                                                    </th>
+
+                                                    <th class="col-6 col-sm-2">
+                                                        <input type="text" class="form-control" placeholder="RISK" aria-label="RISK" aria-describedby="basic-addon2">
+                                                    </th>
+
+                                                    <th class="col-6 col-sm-2">
+                                                        <input type="date" class="form-control" placeholder="DATE" aria-label="DATE" aria-describedby="basic-addon2">
+                                                    </th>
+
+                                                    <th class="col-6 col-sm-2">
+                                                        <input type="time" class="form-control" placeholder="TIME" aria-label="TIME" aria-describedby="basic-addon2">
+                                                    </th>
+
+                                                    <th class="col-sm-2">
+                                                        <button class="btn btn-outline-secondary" type="submit"><h2>DOWNLOAD CSV</h2></button>
+                                                    </th>
+
+                                                    <th class="col-sm-1">
+                                                    </th>
+
+                                                </tr>
+                                            </thead>
+
+                                        </table>
+                                    </div>
+
+
+
+                                    <div class="col-sm-12" style="height:350px; background-color:#000; overflow-y:scroll; overflow-x:hidden;">
+
+<!--activity log goes here ------------------------------------------------------>
+
+                                        <ul class="timeline">
+                                            <li>
+                                              <div class="timeline-badge primary"></div>
+                                              <div class="timeline-panel">
+                                                <div class="timeline-body">
+                                                  <p id="content"></p>
+                                                </div>
+                                              </div>
+                                            </li>
+
+                                            <li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+        </div>
+    </div>
+
+  </body>
+</html>
+
+
+
+<script type="text/javascript">
+$('.hover').click(function(){
+      $('.table-head').toggle();
+      $('.hide-main').toggle();
+  });
+
+$('.inner-hover').click(function(){
+      $('.main-table').toggle();
+      $('.inner-table-head').toggle();
+      $('.inner-graph').toggle();
+  });
+
+
+</script>
+
+<script>
+let k=0;
+(function theLoop (i) {
+    setTimeout(function() {
+        var fruits = ["1&nbsp&nbsp&nbsp&nbsp     SN# 287278248338&nbsp&nbsp&nbsp&nbsp        TEMPERATURE&nbsp&nbsp&nbsp&nbsp            25 C       ON        LOW RISK        90%     BATTERY","2&nbsp&nbsp&nbsp&nbsp        SN# 555629637568&nbsp&nbsp&nbsp&nbsp    HUMIDITY&nbsp&nbsp&nbsp&nbsp        80%        ON    LOW RISK    84% BATTERY","3&nbsp&nbsp&nbsp&nbsp        SN# 483732359797&nbsp&nbsp&nbsp&nbsp    LOAD CELL&nbsp&nbsp&nbsp&nbsp        100     ON    MEDIUM RISK    50% BATTERY","4&nbsp&nbsp&nbsp&nbsp        SN# 793273846475&nbsp&nbsp&nbsp&nbsp    ECO2&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp            1000    ON    HIGH RISK    15% BATTERY","5&nbsp&nbsp&nbsp&nbsp        SN# 957439888383&nbsp&nbsp&nbsp&nbsp    TVDC&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp            100        ON    MEDIUM RISK    40%    BATTERY","6&nbsp&nbsp&nbsp&nbsp   SN# 389884426582&nbsp&nbsp&nbsp&nbsp    LIGHT&nbsp&nbsp&nbsp&nbsp            1        ON    LOW RISK    85%    BATTERY","7&nbsp&nbsp&nbsp&nbsp        SN# 658265769777&nbsp&nbsp&nbsp&nbsp    ACCELEROMETER&nbsp&nbsp&nbsp&nbsp    G        OFF    OFF            0%    BATTERY"];
+        fruits.toString();
+
+        let div = document.createElement('div');
+        div.id = `demo-${k}`;
+        div.innerHTML = `<p>${fruits[k]}</p>`
+
+        document.getElementById('content').prepend(div);
+
+        k=k+1;
+        if (k > fruits.length - 1) {
+            k = 0;
+        }
+        if (--i) {
+            theLoop(i);
+        }
+    }, 500)
+})(10000);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+<script src="https://playground.abysscorp.org/chartjs/livecharts/dist/Chart.min.js"></script>
