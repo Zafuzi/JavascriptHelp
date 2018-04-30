@@ -40,9 +40,8 @@
       color: none;
       background: none;
     }
-    .black {
-      background: #555!important;
-      padding: 1em;
+    .table-row {
+      cursor: pointer;
     }
   </style>
 
@@ -126,7 +125,7 @@
         </div>
       </div>
     </div>
-
+    <!-- MAIN TABLE -->
     <div class="row">
       <div class="col-sm-12">
 
@@ -136,7 +135,7 @@
               <th class="col-6 col-sm-3">
                 <input type="text" list="unit_serials" id="unit_search" class="form-control" placeholder="UNIT SERIAL #" aria-label="UNIT SERIAL #" aria-describedby="basic-addon2">
                 <datalist id="unit_serials">
-                  <option id="tpl_unit_searial_datalist" class="hid" value="__SerialNumber__"></option>
+                  <option id="tpl_unit_serial_datalist" class="hid" value="__SerialNumber__"></option>
                 </datalist>
               </th>
 
@@ -163,52 +162,161 @@
           </thead>
 
           <tbody class="hid">
-            <tr id="tpl_table_row" class="row table-row-dark-black hid accordion-toggle"  data-toggle="collapse" data-target="#collapseOne">
-              <th id="row____id__" scope="row" class="col-12 col-sm-2">
-                <div class="input-group">
-                  <p>___id__</p>
-                  <div class="input-group-append" style="margin-left:25px;">
-                      <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal" data-serial="__SerialNumber__">Sensors</button>
-                  </div>
-                </div>
+            <tr id="tpl_table_row" class="row table-row-dark-black table-row d-flex align-items-center flex-md-row flex-sm-column">
+
+              <th id="row____id__" scope="row" class="p-1 flex-grow-1 text-sm-left text-md-center d-flex flex-row">
+                <p class="p-1">___id__</p>
+                <p class="mr-auto p-1">SN# __SerialNumber__</p>
               </th>
-              
-              <td class="col-4 col-sm-2">
-                <input type="text" class="form-control-plaintext" id="" value="SN# __SerialNumber__" style=" font-family: 'HelveticaNeue-Bold'; color:#fff;">
+
+              <td class="d-flex flex-row align-items-center p-1" style="margin-left: auto; margin-right: 1em;">
+                  <p class="p-1">STATUS</p>
+                  <div class="circle p-1" style="background-color: __status_color__; margin-top: 0;"></div>
+                  <p class="p-1" style="margin-left: 10px;">RISK</p>
+                  <div class="circle p-1" style="background-color: __risk_color__; margin-top: 0;"></div>
               </td>
 
-              <td class="col-4 col-sm-2"></td>
-
-              <td class="col-4 col-sm-2"></td>
-
-              <td class="col-3 col-sm-1">
-                <div class="input-group">
-                  <input type="text" readonly class="form-control-plaintext" id="" value="STATUS" style=" font-family: 'HelveticaNeue-Bold'; color:#fff;">
-                  <div class="input-group-append">
-                    <div class="circle" style="background-color: __status_color__; float:left; margin-top:10px; position: absolute;">
-                  </div>
-                </div>
-              </td>
-
-              <td class="col-3 col-sm-1">
-                  <div class="input-group">
-                    <input type="text" readonly class="form-control-plaintext" id="" value="RISK" style=" font-family: 'HelveticaNeue-Bold'; color:#fff;">
-
-                    <div class="input-group-append">
-                      <div class="circle" style="background-color:__risk_color__; float:left; margin-top:10px; position: absolute;">
-                    </div>
-                  </div>
-              </td>
-
-              <td class="col-6 col-sm-2">
-                <div class="progress">
+              <td class="p-1" style="width: 100%;">
+                <div class="progress d-flex" style="width: 100%;">
                   <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="__POWER__" aria-valuemin="0" aria-valuemax="100" style="width: __POWER__%">
                     <span class="sr-only">40% Complete (success)</span>
                   </div>
                 </div>
               </td>
-              <td>
-                  <div id="collapseOne" class="collapse in">Hidden by default</div>
+
+              <td class="col-sm-12 collapse">
+                <table class="table sensor-table">
+                  <!--this is the inner graph that displays risk and status-->
+                  <div class="col-sm-12 inner-graph" style="border-bottom:solid 1px #fff;">
+                    <div class="drop-border col-12 col-sm-12 col-md-12 col-lg-7 col-xl-8">
+                      <canvas id="chart1" class="hide-canvas"></canvas>
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-4" style="background-color: black;">
+                      <div class="row risk-panel">
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline">
+                          <div class="circle" style="background-color:#DE6B24;"></div>
+                          <p>High Risk</p>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline">
+                          <div class="circle" style="background-color:#FFFF67; margin-left:-11px;"></div>
+                          <p>Medium Risk</p>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline">
+                          <div class="circle" style="background-color:#1299D5;"></div>
+                          <p>Low Risk</p>
+                        </div>
+                      </div>
+
+                      <div class="row risk-panel">
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline" style="color:#DE6B24;">
+                          <h3>10</h3>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-line" style="color:#FFFF67;">
+                          <h3>16</h3>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline" style="color:#1299D5;">
+                          <h3>34</h3>
+                        </div>
+                      </div>
+
+                      <div class="row risk-panel-noline">
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-noline" style="color:#AFAFAF;">
+                          <h3>10</h3>
+                        </div>
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-line" style="color:#6230D1;">
+                          <h3>50</h3>
+                        </div>
+
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 div-none">
+                          <div class="col-12" style="color:#AFAFAF;">
+                            <div class="circle" style="background-color:#AFAFAF; margin-top: 12px"></div>
+                            <p>offline</p>
+                          </div>
+
+                          <div class="col-12" style="color:#6230D1;">
+                            <div class="circle" style="background-color:#6230D1; margin-top:12px"></div>
+                            <p>online</p>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <thead class="inner-table-head">
+                    <tr class="row table-row-light-white">
+                      <th class="col-6 col-sm-2">
+                        <input type="text" class="form-control" placeholder="SENSOR SERIAL #" aria-label="SENSOR SERIAL #" aria-describedby="basic-addon2">
+                      </th>
+
+                      <th class="col-6 col-sm-2">
+                        <input type="text" class="form-control" placeholder="SENSOR TYPE" aria-label="SENSOR TYPE" aria-describedby="basic-addon2">
+                      </th>
+
+                      <th class="col-12 col-sm-2">
+                        <input type="text" class="form-control" placeholder="SENSOR METRIC" aria-label="SENSOR METRIC" aria-describedby="basic-addon2">
+                      </th>
+
+                      <th class="col-12 col-sm-2">
+                        <input type="date" class="form-control" placeholder="DATE" aria-label="DATE">
+                      </th>
+
+                      <th class="col-12 col-sm-4">
+                        <div class="input-group add-on">
+                          <input class="form-control" placeholder="SEARCH" name="srch-term" id="srch-term" type="text">
+                          <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                              <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="hid">
+                    <tr id="tpl_sensor_row____id__" class="row table-row-light-white">
+                      <!-- row -->
+                      <th id="sensor___NAME__" scope="row" class="p-1 flex-grow-1 text-sm-left text-md-center d-flex flex-row">
+                        <div class="input-group">
+                            <p>__NAME__</p>
+                          <div class="input-group-append d-flex" style="margin-left: auto;">
+                              
+                              <div id="light-switch" class="inner-hover" onclick="this.classList.toggle('inner-hover')" data-toggle="collapse" data-target="#demo2"
+                                    class="accordion-toggle">
+                                <div id="inner-toggle"></div>
+                              </div>
+                          </div>
+                        </div>
+                      </th>
+
+                      <td class="col-4 col-sm-2 p-1">
+                        <input type="text" readonly class="form-control-plaintext" id="" value="__NAME__" style=" font-family: 'HelveticaNeue-Bold';">
+                      </td>
+
+                      <td class="col-4 col-sm-2 p-1">
+                        <input type="text" readonly class="form-control-plaintext" id="" value="__LEVEL__" style=" font-family: 'HelveticaNeue-Bold';">
+                      </td>
+
+                      <td class="d-flex flex-row align-items-center p-1" style="margin-left: auto; margin-right: 1em;">
+                          <p class="p-1">STATUS</p>
+                          <div class="circle p-1" style="background-color: __status_color__; margin-top: 0;"></div>
+                          <p class="p-1" style="margin-left: 10px;">RISK</p>
+                          <div class="circle p-1" style="background-color: __risk_color__; margin-top: 0;"></div>
+                      </td>
+
+                      <td class="col-6 col-sm-2 p-1">
+                        <div class="progress-light">
+                          <div class="progress-bar-light progress-bar-success progress-bar-striped-light" role="progressbar" aria-valuenow="__POWER__" aria-valuemin="0"
+                            aria-valuemax="100" style="width: __POWER__%">
+                            <span class="sr-only">90% Complete (success)</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </td>
             </tr>
           </tbody>
@@ -374,7 +482,6 @@
                             </div>
                           </div>
                         </td>
-
                       </tr>
                     </tbody>
                 </table>

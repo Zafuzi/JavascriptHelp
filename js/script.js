@@ -1,3 +1,5 @@
+var UNITS = [];
+var visible_units = [];
 
 document.addEventListener("DOMContentLoaded", function(){
   doFirst();
@@ -13,63 +15,21 @@ function addListeners(){
     let unit = UNITS.filter(u => {
       return (u.SerialNumber == val);
     });
+    console.log(unit)
+  
+    visible_units.push(unit[0]);
+    updateUnits();
 
-    console.log("UNIT: ", unit);
-
-    
-    cloner('tpl_table_row', unit, null, (s) => {
-      console.log("S: ", s);
-      if(s.length < 1) return;
-      $(".main-table tbody").append(s);
-      $(".main-table tbody").removeClass('hid');
-      let option = $('option[value="' + val + '"]');
-      option.remove();
-      $(self).val('');
-    });
+    var option = $("option[value=" + val + "]");
+    console.log(option);
+    option.remove();
+    $(self).val('');
   })
 
-  $('#myModal').on('shown.bs.modal', function(e) {
-      let val = $(e.relatedTarget).data('serial');
-      $('.modal-title').text("UNIT SN #" + val);
-      let unit = UNITS.filter(u => {
-        return (u.SerialNumber == val);
-      })[0];
-
-      console.log(unit);
-
-      $.each(unit.SENSORS, (key, sensor) => {
-        sensor.status_color = sensor.STATUS == "ON" ? "#6230D1" : "red";
-
-        if(sensor.POWER >= 75){
-          sensor.RISK = "LOW";
-        }else if (sensor.POWER >= 35){
-          sensor.RISK = "MEDIUM";
-        } else {sensor.RISK = "HIGH"}
-
-        switch(sensor.RISK){
-            case "HIGH":
-              sensor.risk_color = "red";
-              break;
-            case "MEDIUM":
-              sensor.risk_color = "yellow";
-              break;
-            case "LOW":
-              sensor.risk_color = "green";
-              break;
-        }
-      });
-      console.log("SENSORS: ", unit.SENSORS);
-      $(".sensor-table tbody").html('');
-      cloner('tpl_sensor_row', unit.SENSORS, null, (s) => {
-        console.log("S: ", s);
-        if(s.length < 1) return;
-        $(".sensor-table tbody").append(s);
-        $(".sensor-table tbody").removeClass('hid');
-      });
-  })
+  $('.main-table .sensor-table').on('click', (e) => {
+    e.stopPropagation();
+  });
 }
-
-var UNITS = [];
 
 function setData(){
   var xhr = new XMLHttpRequest();
@@ -80,10 +40,15 @@ function setData(){
   xhr.onload = function (){
     if (xhr.status===200){
       UNITS = JSON.parse(xhr.responseText).UNIT;
+      clone('tpl_unit_serial_datalist', UNITS)
+    }
+  }
+}
 
-      var table = $('.main-table tbody');
+function updateUnits(){
+  var table = $('.main-table tbody');
       
-      $.each(UNITS, (key, UNIT) => {
+      $.each(visible_units, (key, UNIT) => {
         UNIT.status_color = UNIT.STATUS == "ON" ? "#6230D1" : "red";
 
         if(UNIT.POWER >= 75){
@@ -91,8 +56,6 @@ function setData(){
         }else if (UNIT.POWER >= 35){
           UNIT.RISK = "MEDIUM";
         } else {UNIT.RISK = "HIGH"}
-
-        console.log(UNIT.POWER, UNIT.RISK);
 
         switch(UNIT.RISK){
             case "HIGH":
@@ -107,41 +70,168 @@ function setData(){
         }
       })
 
-      // cloner('tpl_table_row', UNITS, 
-      //   function(){
-      //   }, () => { table.removeClass('hid'); }
-      // );
+      clone('tpl_table_row', []);
+      clone('tpl_table_row', visible_units, (e,d,i)=>{
+        $(e).on('click', (evt) => {
+          let self = evt.currentTarget;
+          let isChild = $(evt.target).parent().is(self) ? true : false;
+          if(!isChild) return;
 
-      cloner('tpl_unit_searial_datalist', UNITS, null, function(s){
-        $('#unit_serials').append(s);
+          $.each(d.SENSORS, (key, sensor) => {
+            sensor.status_color = sensor.STATUS == "ON" ? "#6230D1" : "red";
+    
+            if(sensor.POWER >= 75){
+              sensor.RISK = "LOW";
+            }else if (sensor.POWER >= 35){
+              sensor.RISK = "MEDIUM";
+            } else {sensor.RISK = "HIGH"}
+    
+            switch(sensor.RISK){
+                case "HIGH":
+                  sensor.risk_color = "red";
+                  break;
+                case "MEDIUM":
+                  sensor.risk_color = "yellow";
+                  break;
+                case "LOW":
+                  sensor.risk_color = "green";
+                  break;
+            }
+          });
+          clone('tpl_sensor_row_' + d._id, []);
+          clone('tpl_sensor_row_' + + d._id, d.SENSORS);
+          $(self).find(".sensor-table tbody").removeClass('hid');
+          
+          let me = $(self).find('.collapse');
+          let notMe = $('.collapse').not(me);
+          notMe.slideUp(300);
+          me.slideToggle(300);
+          console.log("NOT ME: ", notMe);
+        })
       })
-    }
-  }
+      table.removeClass('hid');
 }
 
-function cloner(id, data, lp, cb){
-  console.log("DATA: ", data);
-  try{
-    var el = $('#' + id)
-    var top = el;
-    var template = $(el)[0].outerHTML;
+clone = function(id, data, cb){
+  if( !clone.templates ){
+    clone.sequence = 1;
+    clone.templates = {};
+  }
 
-    let el_arr = [];
-    
-    $.each(data, (key, row) => {
-      var s = template;
-      $.each(row, (prop, text) => {
-        var regex = new RegExp('\__' + prop + '__', "g");
-        s = s.replace(regex, text);
-        s = s.replace(/\w*hid\b/g, '');
-      })
-      el_arr.push($(s));
-      if(lp) lp();
-    });
+  clone.substitute = ( str, data ) => {
+    $.each(data, (key) => {
+      var re = new RegExp( "__" + key + "__", "g" );
+      str = str.replace( re, ""+(data[ key ]) );
+    })
+    return str;
+  }
+  clone.inject = ( e, data ) => {
+    e.innerHTML = clone.substitute( e.innerHTML, data );
+    var attrs = e.attributes;
+    if( navigator.appName == "Microsoft Internet Explorer" ) {
+      for( var k in attrs ) {
+        var val = e.getAttribute( k );
+        if( val ) {
+          if( typeof val === "string" ) {
+            if( val.match( /__/ ) ) {
+              val = clone.substitute( val, data );
+              e.setAttribute( k, val );
+            }
+          }
+        }
+      }
+    }
+    else {
+      for( var i = 0 ; i < attrs.length ; i++ ) {
+        var attr = attrs[ i ];
+        var val = attr.value;
+        if( val ) {
+          if( typeof val === "string" ) {
+            if( val.match( /__/ ) ) {
+              attr.value = clone.substitute( val, data );
+            }
+          }
+        }
+      }
+    }
+  }
 
-    cb(el_arr);
-  } catch (e){
-    console.error("Error during cloning " + id + " error: "  + e );
+  if(typeof id === "undefined") {
+		return;
+	}
+
+	if( ! ( data instanceof Array ) ) {
+		throw new Error( "clone: replication data is not an array" );
+	}
+	// check first element in array
+	if(data.length > 0 && typeof data[0] !== "object") {
+		throw new Error( "clone: replication data array does not contain objects" );
+	}
+
+	var tem = null;
+
+	if( id instanceof HTMLElement ) { //typeof id === "object" ) 
+		// an element is being passed in rather than an element id
+		var e = id;
+		id = e.id;
+		if( ! id ) {
+			id = "clone_" + clone.seq;
+			clone.seq += 1;
+			e.id = id;
+		}
+	}
+
+	if( typeof id === "string" ) {
+		tem = document.getElementById( id );
+		if(!tem) {
+			tem = clone.templates[ id ];
+			if( ! tem ) {
+				throw new Error( "clone: template not found: " + id );
+			}
+		}
+		else {
+			tem.sib = tem.nextSibling 			// remember sibling - might be null
+			tem.mom = tem.parentNode;			// remember mommy
+		}
+	}
+	else {
+		throw new Error( "clone: invalid template or element id");
+	}
+
+	clone.templates[ id ] = tem;		// store the template in cache
+
+	if(tem.parentNode) {
+		tem.parentNode.removeChild( tem );	// take template out of the DOM
+	}
+
+	// remove from the DOM, all the clones that I created and inserted last time around for this same template
+	if(tem.clones) {
+		tem.clones.forEach(function(clone) {
+			clone.parentNode.removeChild(clone); //remove();        // IE is so fuckin stupid.
+		});
+	}
+	tem.clones = [];
+
+	// clone the template by cloning it and injecting the data into it.
+	// replace existing clones as we go (as opposed to removing them all first then recreateing, which
+	// is disruptive to the UI, and can dramatically change currently viewed page position).
+	var l = data.length
+	var mom = tem.mom;
+	for( var i = 0 ; i < l ; i++ ) {
+		var d = data[ i ]					// get the data src
+
+		var e = tem.cloneNode( true )		// clone the template
+		e.removeAttribute( "id" );			// clear the id from the cloned element
+
+		mom.insertBefore( e, tem.sib );	// insert the clone into the dom
+
+		tem.clones.push(e); //[i] = e;
+
+		clone.inject( e, d );			// inject the data into the element
+
+		if( cb ) {
+			cb( e, d, i );			// lets caller do stuff after each clone is created
+		}
   }
 }
 
@@ -150,7 +240,7 @@ function doFirst(){
   // Make the first chart
   var ctx = document.getElementById("chart0").getContext('2d');
   var myChart = new Chart(ctx, {
-      type: 'horizontalBar',
+      type: 'bar',
       data: {
           labels: ["High Risk", "Medium Risk", "Low Risk", "Offline", "Online"],
           datasets: [{
@@ -175,7 +265,7 @@ function doFirst(){
       },
       options: {
           scales: {
-              xAxes: [{
+              yAxes: [{
                   ticks: {
                       beginAtZero:true
                   }
