@@ -1,468 +1,106 @@
-{"UNIT": [
-			 {"_id":"1",
-        "SerialNumber":"227979783288",
-        "STATUS":"ON",
-				"DATE":"20180525",
-				"RISK":"LOW",
-				"DATE":"20180525",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									}
-}
-},{
-				"_id":"2",
-        "SerialNumber":"555629637568",
-        "STATUS":"ON",
-				"DATE":"20180525",
-				"RISK":"LOW",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									}
+{
+	"UNIT": [
+		{
+			"_id": "1",
+			"SerialNumber": "227979783288",
+			"STATUS": "ON",
+			"DATE": "20180525",
+			"POWER": "87",
+			"SENSORS": [
+				{
+					"NAME": "HUMIDITY",
+					"LEVEL": "45",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "100"
+				},
+				{
+					"NAME": "LOAD CELL",
+					"LEVEL": "71",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "91"
+				},
+				{
+					"NAME": "EC02",
+					"LEVEL": "32",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "33"
+				},
+				{
+					"NAME": "TVDC",
+					"LEVEL": "95",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "87"
+				},
+				{
+					"NAME": "TEMPERATURE",
+					"LEVEL": "14",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "65"
+				},
+				{
+					"NAME": "ACCELEROMETER",
+					"LEVEL": "G",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "100"
+				}
+			]
+		},
+		{
+			"_id": "1",
+			"SerialNumber": "109283470192",
+			"STATUS": "ON",
+			"DATE": "20180525",
+			"POWER": "45",
+			"SENSORS": [
+				{
+					"NAME": "HUMIDITY",
+					"LEVEL": "45",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "100"
+				},
+				{
+					"NAME": "LOAD CELL",
+					"LEVEL": "71",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "91"
+				},
+				{
+					"NAME": "EC02",
+					"LEVEL": "32",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "33"
+				},
+				{
+					"NAME": "TVDC",
+					"LEVEL": "95",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "87"
+				},
+				{
+					"NAME": "TEMPERATURE",
+					"LEVEL": "14",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "65"
+				},
+				{
+					"NAME": "ACCELEROMETER",
+					"LEVEL": "G",
+					"STATUS": "ON",
+					"DATE": "20180525",
+					"POWER": "100"
+				}
+			]
 		}
-},{
-				"_id":"3",
-        "SerialNumber":"483732359797",
-        "STATUS":"ON",
-				"RISK":"LOW",
-				"DATE":"20180525",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-								}
-	}
-},{
-				"_id":"4",
-        "SerialNumber":"793273846475",
-        "STATUS":"ON",
-				"DATE":"20180525",
-				"RISK":"LOW",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-								}
-	}
-},{
-				"_id":"5",
-        "SerialNumber":"957439888383",
-        "STATUS":"ON",
-				"DATE":"20180525",
-				"RISK":"LOW",
-				"DATE":"20180525",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-								}
-	}
-},{
-				"_id":"6",
-        "SerialNumber":"389884426582",
-        "STATUS":"ON",
-				"RISK":"LOW",
-				"DATE":"20180525",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"DATE":"",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-								}
-	}
-},{
-				"_id":"7",
-        "SerialNumber":"658265769777",
-        "STATUS":"ON",
-				"RISK":"LOW",
-				"DATE":"20180525",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-								}
-	}
-},{
-				"_id":"8",
-        "SerialNumber":"537239298743",
-        "STATUS":"ON",
-				"RISK":"LOW",
-				"DATE":"20180525",
-				"POWER":"50",
-				"SENSORS":{
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"25",
-									"STATUS":"ON",
-									"RISK":"LOW",
-			          	"DATE":"20180525",
-									"POWER":"50"
-									},
-						"HUMIDITY":{
-									"HUMIDITY":"80",
-									"STATUS":"ON",
-									"RISK":"LOW",
-								  "DATE":"20180525",
-									"POWER":"50"
-									},
-						"LOAD CELL":{
-									"LOAD CELL":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"EC02 SENSOR":{
-									"ECO2":"1000",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TVDC":{
-									"TVDC":"100",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"TEMPERATURE SENSOR":{
-									"TEMPERATURE":"1",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-									},
-						"ACCELEROMETER SENSOR":{
-									"ACCELEROMETER":"G",
-									"STATUS":"ON",
-									"RISK":"LOW",
-									"DATE":"20180525",
-									"POWER":"50"
-						}
-					}}
-]}
+	]
+}
