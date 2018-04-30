@@ -249,46 +249,46 @@ function doFirst(){
               data: [10],
               borderColor: [
                   'rgba(255, 166, 77, 1)',
-                  // 'rgba(255, 206, 86, 1)',
-                  // 'rgba(54, 162, 235, 1)',
-                  // 'rgba(175, 175, 175, 1)',
-                  // 'rgba(102, 0, 255, 1)'
               ],
-              borderWidth: 1
-          },
-          {
-            label: 'medium',
-            data: [16],
-            borderColor: [
-              'rgba(255, 206, 86, 1)',
-            ],
-            borderWidth: 1
-          },
-          {
-            label: 'low',
-            data: [34],
-            borderColor: [
-              'rgba(54, 162, 235, 1)',
-            ],
-            borderWidth: 1
-          },
-          {
-            label: 'offline',
-            data: [10],
-            borderColor: [
-              'rgba(175, 175, 175, 1)',
-            ],
-            borderWidth: 1
-          },
-          {
-            label: 'online',
-            data: [50],
-            borderColor: [
-              'rgba(102, 0, 255, 1)',
-            ],
-            borderWidth: 1
-          }
-        ]
+              borderWidth: 1,
+            },
+            {
+              label: 'medium',
+              data: [16],
+              borderColor: [
+                'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 1,
+            },
+            {
+              label: 'low',
+              data: [34],
+              borderColor: [
+                'rgba(54, 162, 235, 1)',
+              ],
+              borderWidth: 1,
+            },
+            {
+              label: 'offline',
+              data: [10],
+              backgroundColor: [
+                'rgba(175, 175, 175, .2)',
+              ],
+              borderColor: [
+                'rgba(175, 175, 175, 1)',
+              ],
+              borderWidth: 1,
+              borderDash: [5,5,5],
+            },
+            {
+              label: 'online',
+              data: [50],
+              borderColor: [
+                'rgba(102, 0, 255, 1)',
+              ],
+              borderWidth: 1,
+            }
+          ]
       },
       options: {
         responsive: true,
@@ -320,11 +320,11 @@ function doFirst(){
   }
 
   setInterval(function(){
-    unit_counts.high = getRandomInt(12, 10);
-    unit_counts.offline = getRandomInt(unit_counts.high+2, unit_counts.high-2);
-    let medium = 60 - unit_counts.high;
+    unit_counts.high = getRandomInt(7, 5);
+    unit_counts.offline = getRandomInt(unit_counts.high+5, unit_counts.high-5);
+    let medium = 30 - unit_counts.high;
     unit_counts.medium = getRandomInt(medium);
-    let low = 60 - unit_counts.medium;
+    let low = 55 - unit_counts.medium;
     unit_counts.low = low
     unit_counts.online = 60 - unit_counts.offline;
 
@@ -343,6 +343,12 @@ function doFirst(){
         dataset.data.shift();
     })
     myChart.update();
+
+    $('#high_risk_unit_count').text(unit_counts.high);
+    $('#medium_risk_unit_count').text(unit_counts.medium);
+    $('#low_risk_unit_count').text(unit_counts.low);
+    $('#offline_unit_count').text(unit_counts.offline);
+    $('#online_unit_count').text(unit_counts.online);
   }, 1000)
 
   $('.hover').click(function () {
