@@ -240,40 +240,110 @@ function doFirst(){
   // Make the first chart
   var ctx = document.getElementById("chart0").getContext('2d');
   var myChart = new Chart(ctx, {
-      type: 'bar',
+      type: 'line',
       data: {
-          labels: ["High Risk", "Medium Risk", "Low Risk", "Offline", "Online"],
-          datasets: [{
-              label: '# of UNITS',
-              data: [10, 16, 34, 10, 50],
-              backgroundColor: [
-                  'rgba(255, 166, 77, .2)',
-                  'rgba(255, 206, 86, .2)',
-                  'rgba(54, 162, 235, .2)',
-                  'rgba(175, 175, 175, .2)',
-                  'rgba(102, 0, 255,.2)'
-              ],
+          labels: [0,1,2,3,4,5,6,7,8,9,10],
+          datasets: [
+            {
+              label: 'high',
+              data: [10],
               borderColor: [
                   'rgba(255, 166, 77, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(175, 175, 175, 1)',
-                  'rgba(102, 0, 255, 1)'
+                  // 'rgba(255, 206, 86, 1)',
+                  // 'rgba(54, 162, 235, 1)',
+                  // 'rgba(175, 175, 175, 1)',
+                  // 'rgba(102, 0, 255, 1)'
               ],
               borderWidth: 1
-          }]
+          },
+          {
+            label: 'medium',
+            data: [16],
+            borderColor: [
+              'rgba(255, 206, 86, 1)',
+            ],
+            borderWidth: 1
+          },
+          {
+            label: 'low',
+            data: [34],
+            borderColor: [
+              'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+          },
+          {
+            label: 'offline',
+            data: [10],
+            borderColor: [
+              'rgba(175, 175, 175, 1)',
+            ],
+            borderWidth: 1
+          },
+          {
+            label: 'online',
+            data: [50],
+            borderColor: [
+              'rgba(102, 0, 255, 1)',
+            ],
+            borderWidth: 1
+          }
+        ]
       },
       options: {
-          scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
-          }
+        responsive: true,
+        title:{
+            display:true,
+            text: 'Chart.js'
+        },
+        scaleStartValue: 0,
+        scales: {
+            xAxes: [{
+                display: true,
+                ticks: {
+                  beginAtZero:true
+                }
+            }],
+            yAxes: [{
+                display: true
+            }]
+        }
       }
   });
 
+  var unit_counts = {
+    high: 10,
+    medium: 16,
+    low: 34,
+    offline: 10,
+    online: 50
+  }
+
+  setInterval(function(){
+    unit_counts.high = getRandomInt(12, 10);
+    unit_counts.offline = getRandomInt(unit_counts.high+2, unit_counts.high-2);
+    let medium = 60 - unit_counts.high;
+    unit_counts.medium = getRandomInt(medium);
+    let low = 60 - unit_counts.medium;
+    unit_counts.low = low
+    unit_counts.online = 60 - unit_counts.offline;
+
+    let last = myChart.data.labels[myChart.data.labels.length - 1]
+    myChart.data.labels.push(last += 1);
+    if(myChart.data.labels.length >= 10)
+      myChart.data.labels.shift();
+
+    $.each(unit_counts, (key, data)=> {
+      let index = Object.keys(unit_counts).indexOf(key)
+      let dataset = myChart.data.datasets[index];
+      let last_data = dataset.data[dataset.data.length - 1]
+
+      dataset.data.push(unit_counts[key]);
+      if(dataset.data.length >= 10)
+        dataset.data.shift();
+    })
+    myChart.update();
+  }, 1000)
 
   $('.hover').click(function () {
     $('.table-head').toggle();
@@ -317,4 +387,11 @@ function doFirst(){
     })(10000);
 
     
+}
+
+function getRandomInt(max, min) {
+  if(min){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  return Math.floor(Math.random() * Math.floor(max));
 }
